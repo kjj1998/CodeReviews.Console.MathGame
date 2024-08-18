@@ -6,10 +6,11 @@ public static class Menu
     {
         System.Console.WriteLine("Welcome to the Math Game!");
         System.Console.WriteLine("Please select which game you want to play from the list below:");
-        System.Console.WriteLine("1. Addition - Press A to select this");
-        System.Console.WriteLine("2. Subtraction - Press B to select this");
-        System.Console.WriteLine("3. Multiplication - Press C to select this");
-        System.Console.WriteLine("4. Division - Press D to select this");
-        System.Console.WriteLine("5. Exit - Press E to end the game\n");
+        System.Console.WriteLine("1. Addition - Press A to select the addition game");
+        System.Console.WriteLine("2. Subtraction - Press B to select the subtraction game");
+        System.Console.WriteLine("3. Multiplication - Press C to select the multiplication game");
+        System.Console.WriteLine("4. Division - Press D to select the division game");
+        System.Console.WriteLine("5. History and Statistics - Press E to show game history and stats");
+        System.Console.WriteLine("6. Exit - Press F to end the game\n");
     }
 }

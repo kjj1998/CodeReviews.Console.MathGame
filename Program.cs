@@ -2,7 +2,7 @@
 
 string? gameChoice;
 bool exitGame = false;
-HashSet<string> validGameChoices = ["A", "B", "C", "D", "E", "a", "b", "c", "d", "e"];
+HashSet<string> validGameChoices = ["A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f"];
 
 do
 {
@@ -15,7 +15,7 @@ do
     }
     gameChoice = gameChoice?.ToLower();
 
-    if (gameChoice is "e" or "E")
+    if (gameChoice is "f")
     {
         exitGame = true;
     }
@@ -34,6 +34,9 @@ do
                 break;
             case "d":
                 GameEngine.Game(3);
+                break;
+            case "e":
+                GameEngine.DisplayHistoryAndStatistics();
                 break;
             default:
                 Console.WriteLine("Invalid input. Please re-enter your choice");
