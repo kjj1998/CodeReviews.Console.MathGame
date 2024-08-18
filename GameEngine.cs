@@ -1,7 +1,7 @@
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
 namespace CodeReviews.Console.MathGame;
-
 using System;
+using System.Diagnostics;
 
 public static class GameEngine
 {
@@ -51,7 +51,7 @@ public static class GameEngine
                     break;
                 case "Medium":
                     numA = NumberGenerator.Next(0, 101);
-                    numB = NumberGenerator.Next(0, 11);
+                    numB = NumberGenerator.Next(0, 21);
                     break;
                 case "Hard":
                     numA = NumberGenerator.Next(0, 101);
@@ -94,7 +94,9 @@ public static class GameEngine
         Console.WriteLine($"You have selected the {GameCategories[gameChoice]} game and you " +
                           $"are playing on {_gameDifficulty} difficulty!");
         Console.WriteLine("Enter your answer after the prompt or enter the letter 'e' to end the current game");
-                
+
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
         while (true)
         {
             var localTime = DateTime.Now;
@@ -142,9 +144,13 @@ public static class GameEngine
             AttemptedGames[gameChoice]++;
             Histories.Add(currentGame);
         }
+        stopwatch.Stop();
         
-        Console.WriteLine($"You attempted {AttemptedGames[gameChoice]} {GameCategories[gameChoice]} questions " +
-                          $"on {_gameDifficulty} difficulty and got {GameScores[gameChoice]} questions correct!\n");
+        Console.WriteLine($"Question category: {GameCategories[gameChoice]}");
+        Console.WriteLine($"Number of questions attempted: {AttemptedGames[gameChoice]}");
+        Console.WriteLine($"Number of correct questions: {GameScores[gameChoice]}");
+        Console.WriteLine($"Difficulty level: {_gameDifficulty}");
+        Console.WriteLine($"Time taken: {stopwatch.Elapsed.Seconds} seconds\n");
     }
 
     public static void DisplayHistoryAndStatistics()
