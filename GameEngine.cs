@@ -11,6 +11,8 @@ public static class GameEngine
     private static readonly string[] GameCategories = ["addition", "subtraction", "multiplication", "division"];
     private static readonly string[] Operators = ["+", "-", "*", "/"];
     private static readonly List<List<string>> Histories = [];
+    private static string _gameDifficulty = "Medium";
+    private static readonly HashSet<string> DifficultyChoices = ["e", "E", "m", "M", "h", "H"];
 
     private static bool CheckDividendsForDivision(int numA, int numB)
     {
@@ -19,19 +21,55 @@ public static class GameEngine
 
     private static int[] GenerateNumbersForGame(int gameChoice)
     {
-        int numA = NumberGenerator.Next(0, 100);
-        int numB = NumberGenerator.Next(0, 11);
-        int result = 0;
-
-        if (gameChoice == 3)
+        int numA = 0, numB = 0;
+        switch (_gameDifficulty)
         {
-            while (CheckDividendsForDivision(numA, numB) == false)
-            {
-                numA = NumberGenerator.Next(0, 100);
+            case "Easy":
+                numA = NumberGenerator.Next(0, 11);
                 numB = NumberGenerator.Next(0, 11);
+                break;
+            case "Medium":
+                numA = NumberGenerator.Next(0, 101);
+                numB = NumberGenerator.Next(0, 11);
+                break;
+            case "Hard":
+                numA = NumberGenerator.Next(0, 101);
+                numB = NumberGenerator.Next(0, 101);
+                break;
+        }
+
+        if (gameChoice != 3) 
+            return [numA, numB];
+        
+        while (CheckDividendsForDivision(numA, numB) == false)
+        {
+            switch (_gameDifficulty)
+            {
+                case "Easy":
+                    numA = NumberGenerator.Next(0, 11);
+                    numB = NumberGenerator.Next(0, 11);
+                    break;
+                case "Medium":
+                    numA = NumberGenerator.Next(0, 101);
+                    numB = NumberGenerator.Next(0, 11);
+                    break;
+                case "Hard":
+                    numA = NumberGenerator.Next(0, 101);
+                    numB = NumberGenerator.Next(0, 101);
+                    break;
             }
         }
 
+        return [numA, numB];
+    }
+
+    private static int[] GenerateQuestionAndAnswer(int gameChoice)
+    {
+        int[] gameNumbers = GenerateNumbersForGame(gameChoice);
+        int numA = gameNumbers[0];
+        int numB = gameNumbers[1];
+        int result = 0;
+        
         switch (gameChoice)
         {
             case 0:
@@ -53,13 +91,14 @@ public static class GameEngine
     
     public static void Game(int gameChoice)
     {
-        Console.WriteLine($"You have selected the {GameCategories[gameChoice]} game!");
+        Console.WriteLine($"You have selected the {GameCategories[gameChoice]} game and you " +
+                          $"are playing on {_gameDifficulty} difficulty!");
         Console.WriteLine("Enter your answer after the prompt or enter the letter 'e' to end the current game");
                 
         while (true)
         {
             var localTime = DateTime.Now;
-            int[] gameNumbers = GenerateNumbersForGame(gameChoice);
+            int[] gameNumbers = GenerateQuestionAndAnswer(gameChoice);
                     
             Console.WriteLine($"What is {gameNumbers[0]} {Operators[gameChoice]} {gameNumbers[1]} ?");
             string response = Console.ReadLine() ?? string.Empty;
@@ -99,12 +138,13 @@ public static class GameEngine
                     currentGame.Add("Incorrect");
                 }
             }
+            currentGame.Add(_gameDifficulty);
             AttemptedGames[gameChoice]++;
             Histories.Add(currentGame);
         }
         
         Console.WriteLine($"You attempted {AttemptedGames[gameChoice]} {GameCategories[gameChoice]} questions " +
-                          $"and got {GameScores[gameChoice]} questions correct!\n");
+                          $"on {_gameDifficulty} difficulty and got {GameScores[gameChoice]} questions correct!\n");
     }
 
     public static void DisplayHistoryAndStatistics()
@@ -115,12 +155,13 @@ public static class GameEngine
             return;
         } 
         
-        Console.WriteLine("Time\t\t \tQuestion\tResponse\tStatus");
+        Console.WriteLine("Time\t\t \tQuestion\tResponse\tDifficulty\tStatus");
         foreach (var history in Histories)
         {
-            Console.Write($"{history[0]}\t");
+            Console.Write($"{history[0]}\t"); 
             Console.Write($"{history[1]} {history[2]} {history[3]}\t");
             Console.Write($"\t{history[4]}\t");
+            Console.Write($"\t{history[6]}\t");
             Console.Write($"\t{history[5]}\n");
         }
         Console.WriteLine();
@@ -135,9 +176,41 @@ public static class GameEngine
             totalScore += GameScores[i];
         }
 
-        double correctPercentage = Math.Round((totalScore / (double) totalGamesAttempted) * 100, 2);
-        
+        double correctPercentage = Math.Round(totalScore / (double) totalGamesAttempted * 100, 2);
         Console.WriteLine($"In total, you attempted {totalGamesAttempted} and got a score of {totalScore} with a " +
                           $"correct percentage of {correctPercentage}%\n");
+    }
+
+    public static void SetGameDifficulty()
+    {
+        Console.WriteLine($"Please set your desired game difficulty. Current difficulty is {_gameDifficulty}");
+        Console.WriteLine("1. Press E to set easy difficulty.");
+        Console.WriteLine("2. Press M to set medium difficulty.");
+        Console.WriteLine("3. Press H to set hard difficulty");
+        
+        string difficultyChoice = Console.ReadLine() ?? string.Empty;
+        while (!DifficultyChoices.Contains(difficultyChoice))
+        {
+            Console.WriteLine("Invalid input. Please re-enter your choice.");
+            difficultyChoice = Console.ReadLine() ?? string.Empty;
+        }
+        difficultyChoice = difficultyChoice.ToLower();
+        
+
+        switch (difficultyChoice)
+        {
+            case "e":
+                Console.WriteLine("You have selected Easy difficulty.\n");
+                _gameDifficulty = "Easy";
+                break;
+            case "m":
+                Console.WriteLine("You have selected Medium difficulty.\n");
+                _gameDifficulty = "Medium";
+                break;
+            case "h":
+                Console.WriteLine("You have selected Hard difficulty.\n");
+                _gameDifficulty = "Hard";
+                break;
+        }
     }
 }
