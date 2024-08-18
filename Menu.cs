@@ -1,6 +1,6 @@
 namespace CodeReviews.Console.MathGame;
 
-public class Menu
+public static class Menu
 {
     public static void DisplayMenu()
     {
