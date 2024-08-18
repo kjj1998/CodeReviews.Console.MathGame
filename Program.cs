@@ -2,7 +2,7 @@
 
 string? gameChoice;
 bool exitGame = false;
-HashSet<string> validGameChoices = ["A", "B", "C", "D", "E", "F", "G", "a", "b", "c", "d", "e", "f", "g"];
+HashSet<string> validGameChoices = ["A", "B", "C", "D", "E", "F", "G", "H", "a", "b", "c", "d", "e", "f", "g", "h"];
 
 do
 {
@@ -15,7 +15,7 @@ do
     }
     gameChoice = gameChoice?.ToLower();
 
-    if (gameChoice is "g")
+    if (gameChoice is "h")
     {
         exitGame = true;
     }
@@ -36,9 +36,12 @@ do
                 GameEngine.Game(3);
                 break;
             case "e":
-                GameEngine.SetGameDifficulty();
+                GameEngine.Game(0, true);
                 break;
             case "f":
+                GameEngine.SetGameDifficulty();
+                break;
+            case "g":
                 GameEngine.DisplayHistoryAndStatistics();
                 break;
             default:

@@ -10,8 +10,9 @@ public static class Menu
         System.Console.WriteLine("2. Subtraction - Press B to select the subtraction game");
         System.Console.WriteLine("3. Multiplication - Press C to select the multiplication game");
         System.Console.WriteLine("4. Division - Press D to select the division game");
-        System.Console.WriteLine("5. Difficulty - Press E to set the difficulty of the game");
-        System.Console.WriteLine("6. History and Statistics - Press F to show game history and stats");
-        System.Console.WriteLine("7. Exit - Press G to end the game\n");
+        System.Console.WriteLine("5. Random Game - Press E to select the random game");
+        System.Console.WriteLine("6. Difficulty - Press F to set the difficulty of the game");
+        System.Console.WriteLine("7. History and Statistics - Press G to show game history and stats");
+        System.Console.WriteLine("8. Exit - Press H to end the game\n");
     }
 }

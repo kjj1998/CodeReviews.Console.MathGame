@@ -89,16 +89,22 @@ public static class GameEngine
         return [numA, numB, result];
     }
     
-    public static void Game(int gameChoice)
+    public static void Game(int gameChoice, bool randomGame = false)
     {
-        Console.WriteLine($"You have selected the {GameCategories[gameChoice]} game and you " +
-                          $"are playing on {_gameDifficulty} difficulty!");
+        Console.WriteLine($"You have selected the {(randomGame ? "random" : GameCategories[gameChoice])} game " +
+                          $"and you are playing on {_gameDifficulty} difficulty!");
         Console.WriteLine("Enter your answer after the prompt or enter the letter 'e' to end the current game");
 
+        var numberOfAttemptedQuestions = 0;
+        var numberOfCorrectQuestions = 0;
         var stopwatch = new Stopwatch();
         stopwatch.Start();
+        
         while (true)
         {
+            if (randomGame)
+                gameChoice = NumberGenerator.Next(0, 4);
+            
             var localTime = DateTime.Now;
             int[] gameNumbers = GenerateQuestionAndAnswer(gameChoice);
                     
@@ -133,6 +139,7 @@ public static class GameEngine
                     Console.WriteLine("Your answer is correct!");
                     GameScores[gameChoice] += 1;
                     currentGame.Add("Correct");
+                    numberOfCorrectQuestions++;
                 }
                 else
                 {
@@ -143,12 +150,13 @@ public static class GameEngine
             currentGame.Add(_gameDifficulty);
             AttemptedGames[gameChoice]++;
             Histories.Add(currentGame);
+            numberOfAttemptedQuestions++;
         }
         stopwatch.Stop();
         
-        Console.WriteLine($"Question category: {GameCategories[gameChoice]}");
-        Console.WriteLine($"Number of questions attempted: {AttemptedGames[gameChoice]}");
-        Console.WriteLine($"Number of correct questions: {GameScores[gameChoice]}");
+        Console.WriteLine($"Question category: {(randomGame ? "random" : GameCategories[gameChoice])}");
+        Console.WriteLine($"Number of questions attempted: {numberOfAttemptedQuestions}");
+        Console.WriteLine($"Number of correct questions: {numberOfCorrectQuestions}");
         Console.WriteLine($"Difficulty level: {_gameDifficulty}");
         Console.WriteLine($"Time taken: {stopwatch.Elapsed.Seconds} seconds\n");
     }
